@@ -5,6 +5,6 @@
 ## Author: Frightware
 ## SavedVariablesPerCharacter: DingLevelUpSettings
 ## DefaultState: Enabled
-## IconTexture: Interface\AddOns\Ding_Level_Up\icon.blp
+## IconTexture: Interface\AddOns\Ding_Level_Up\icon.tga
 
 Core.lua
