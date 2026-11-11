@@ -20,7 +20,7 @@ jobs:
           cp Ding_Level_Up/*.lua Ding_Level_Up/*.toc Ding_Level_Up/*.tga Ding_Level_Up/*.md release_build/Ding_Level_Up/ 2>/dev/null || true
           
           cd release_build
-          zip -r ../Ding_Level_Up.zip Ding_Level_Up
+          zip -r ../Ding_Level_Up-${{ github.ref_name }}.zip Ding_Level_Up
           cd ..
 
       - name: Upload Zip to GitHub Release
