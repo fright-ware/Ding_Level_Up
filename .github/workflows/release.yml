@@ -13,11 +13,11 @@ jobs:
 
       - name: Package Universal Zip
         run: |
-          # Create a clean release folder structure
+          # Create a clean release directory structure
           mkdir -p release_build/Ding_Level_Up
           
-          # Copy all necessary add-on files directly from the root
-          cp Core.lua *.toc icon.tga README.md release_build/Ding_Level_Up/ 2>/dev/null || true
+          # Copy files from the inner Ding_Level_Up repository folder
+          cp Ding_Level_Up/*.lua Ding_Level_Up/*.toc Ding_Level_Up/*.tga Ding_Level_Up/*.md release_build/Ding_Level_Up/ 2>/dev/null || true
           
           cd release_build
           zip -r ../Ding_Level_Up.zip Ding_Level_Up
