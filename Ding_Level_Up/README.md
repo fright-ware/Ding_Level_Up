@@ -1,8 +1,8 @@
 # Ding! Level Up (Player & Pet)
 
-A lightweight, reliable World of Warcraft: Forever addon that automatically announces level-up milestones for both **Players** and **Pets** to Guild Chat.
+A lightweight, reliable World of Warcraft addon that automatically announces level-up milestones for both **Players** and **Pets** to Guild Chat across multiple game versions.
 
-![Addon Logo](../../icon.png)
+![Addon Logo](../icon.png)
 
 ## 🚀 Features
 
@@ -18,10 +18,11 @@ A lightweight, reliable World of Warcraft: Forever addon that automatically anno
 
 ## 🛠 Installation
 
-1. Download the latest release.
+1. Download the latest `Ding_Level_Up.zip` release.
 2. Extract the `Ding_Level_Up` folder.
-3. Move the folder to your World of Warcraft directory:
-   `_forever_/Interface/AddOns/`
+3. Move the folder to your corresponding World of Warcraft directory:
+   - **WoW Forever:** `.../World of Warcraft/_forever_/Interface/AddOns/`
+   - **TBC Classic:** `.../World of Warcraft/_classic_/Interface/AddOns/`
 4. Restart your game or reload your UI (`/reload`).
 
 ---
@@ -41,7 +42,7 @@ Use `/ding` to manage your settings:
 
 ## 📝 Technical Details
 
-- **Interface:** 16001 (WoW Forever)
+- **Supported Clients:** TBC Classic & WoW Forever (Multi-TOC architecture)
 - **Events Handled:** `PLAYER_LEVEL_UP`, `UNIT_LEVEL`, `UNIT_PET`, `ADDON_LOADED`
 - **Saved Variables:** `DingLevelUpSettings` (Per-Character)
 
@@ -49,4 +50,4 @@ Use `/ding` to manage your settings:
 
 ## 👤 Author
 
-**Frightware** *Built for the WoW Forever Community.*
+**Frightware** *Built for the Classic & Forever Community.*
