@@ -1,7 +1,7 @@
 ## Interface: 16001
 ## Title: Ding! Level Up
 ## Notes: Automatically announce player and pet level ups to Guild Chat
-## Version: 1.0.0
+## Version: 1.1.0
 ## Author: Frightware
 ## SavedVariablesPerCharacter: DingLevelUpSettings
 ## DefaultState: Enabled
