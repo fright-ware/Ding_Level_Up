@@ -1,6 +1,13 @@
+local addonName, addonTable = ...
+
 local lastPetLevel = 0
 local lastPetGuid = nil
 local _, playerClass = UnitClass("player")
+
+-- Safe string trim helper
+local function Trim(s)
+    return (s:gsub("^%s*(.-)%s*$", "%1"))
+end
 
 local function UpdatePetInfo()
     lastPetGuid = UnitGUID("pet")
@@ -21,6 +28,16 @@ local function InitializeSettings()
     end
 end
 
+-- Safe wrapper for sending chat messages to prevent any execution stack taint
+local function SafeSendChat(msg)
+    if IsInGuild() then
+        -- pcall wraps chat sending to ensure protected execution integrity
+        pcall(SendChatMessage, msg, "GUILD")
+    else
+        print("|cff00ff00[DingLevelUp]|r " .. msg)
+    end
+end
+
 -- Create a hidden frame to "listen" for game events
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("ADDON_LOADED")
@@ -29,7 +46,7 @@ frame:RegisterEvent("UNIT_LEVEL")
 frame:RegisterEvent("UNIT_PET")
 
 frame:SetScript("OnEvent", function(self, event, arg1)
-    if event == "ADDON_LOADED" and arg1 == "Ding_Level_Up" then
+    if event == "ADDON_LOADED" and arg1 == addonName then
         InitializeSettings()
         print("|cff00ff00[DingLevelUp]|r loaded.")
         return
@@ -37,11 +54,7 @@ frame:SetScript("OnEvent", function(self, event, arg1)
 
     if event == "PLAYER_LEVEL_UP" and DingLevelUpSettings.playerAnnounce then
         local level = arg1 or UnitLevel("player")
-        if IsInGuild() then
-            SendChatMessage("DING! I just reached level " .. level .. "!", "GUILD")
-        else
-            print("|cff00ff00[DingLevelUp]|r DING! I just reached level " .. level .. "!")
-        end
+        SafeSendChat("DING! I just reached level " .. level .. "!")
         return
     elseif playerClass == "HUNTER" and event == "UNIT_PET" then
         UpdatePetInfo()
@@ -60,21 +73,19 @@ frame:SetScript("OnEvent", function(self, event, arg1)
                 return
             end
 
-            if petLevel > lastPetLevel and petLevel > 0 then
-                if IsInGuild() then
-                    SendChatMessage("DING! " .. petName .. " just reached level " .. petLevel .. "!", "GUILD")
-                else
-                    print("|cff00ff00[DingLevelUp]|r DING! " .. petName .. " just reached level " .. petLevel .. "!")
-                end
+            if petLevel and lastPetLevel and petLevel > lastPetLevel and petLevel > 0 then
+                SafeSendChat("DING! " .. (petName or "My pet") .. " just reached level " .. petLevel .. "!")
             end
-            lastPetLevel = petLevel
+            if petLevel then
+                lastPetLevel = petLevel
+            end
         end)
     end
 end)
 
 SLASH_DINGLEVELUP1 = "/ding"
 SlashCmdList["DINGLEVELUP"] = function(msg)
-    local cmd = msg:lower():trim()
+    local cmd = Trim(msg:lower())
     if cmd == "player" then
         DingLevelUpSettings.playerAnnounce = not DingLevelUpSettings.playerAnnounce
         print("Player Ding: " .. (DingLevelUpSettings.playerAnnounce and "|cff00ff00ON|r" or "|cffff0000OFF|r"))
@@ -84,14 +95,11 @@ SlashCmdList["DINGLEVELUP"] = function(msg)
     elseif cmd == "test" then
         local level = UnitLevel("player")
         print("|cff00ff00[DingLevelUp]|r Simulating announcement...")
-        if IsInGuild() then
-            SendChatMessage("DING! I just reached level " .. level .. "! (Test)", "GUILD")
-        else
-            print("|cff00ff00[DingLevelUp]|r DING! I just reached level " .. level .. "! (Test)")
-        end
+        SafeSendChat("DING! I just reached level " .. level .. "! (Test)")
     else
         print("|cffffff00DingLevelUp Options:|r")
         print("Type |cffffff00/ding player|r to toggle Player Announce")
         print("Type |cffffff00/ding pet|r to toggle Pet Announce")
+        print("Type |cffffff00/ding test|r to test your announcement")
     end
 end
